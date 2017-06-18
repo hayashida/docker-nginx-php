@@ -1,0 +1,28 @@
+version: "2"
+services:
+  nginx:
+    build: ./nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ../:/var/www/html
+    links:
+      - web
+    container_name: nginx_php
+
+  web:
+    build: ./php-fpm
+    volumes:
+      - ../:/var/www/html
+    links:
+      - db
+    container_name: web_phpfpm
+
+  db:
+    image: mysql:5.7
+    ports:
+      - "13306:3306"
+    volumes:
+      - ../db_data:/var/lib/mysql
+    env_file: .env
+    container_name: db_mysql
